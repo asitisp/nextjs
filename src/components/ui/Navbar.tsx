@@ -47,8 +47,7 @@ export function NavbarWithDropdown() {
   <div className="navbar-center ">
          <Image
       src="/next.svg"
-      width={60}
-      height={60}
+     fill
       alt="Picture of the author"
     />
     
@@ -105,11 +104,11 @@ export function NavbarWithKeys() {
         </ul>
         </div>
         </div>
-        <div className="navbar-center ">
+        <div className="relative w-32 h-10 ">
          <Image
-      src="/next.svg"
-      width={60}
-      height={60}
+      src="/file.svg"
+      fill
+      className="object-contain"
       alt="Picture of the author"
     />
     

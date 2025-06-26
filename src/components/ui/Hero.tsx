@@ -19,10 +19,11 @@ export function Hero1() {
 }
 export function Hero2() {
     return (
+      <>
         <div className="hero bg-base-200 min-h-screen">
-  <div className="hero-content flex-col lg:flex-row">
-    <Image alt="daisy"
-      src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
+  <div className="relative w-32 h-10">
+    <Image alt="daisy" fill
+      src="./file.svg"
       className="max-w-sm rounded-lg shadow-2xl"
     />
     <div>
@@ -34,7 +35,7 @@ export function Hero2() {
       <button className="btn btn-primary">Get Started</button>
     </div>
   </div>
-</div>
+</div></>
     );
 }
 export function Hero3() {
