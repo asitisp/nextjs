@@ -1,33 +1,20 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from 'mongoose';
 
-// 🔥 Clear cached model to avoid schema mismatch
-delete mongoose.models.Product;
-
-const ProductSchema = new mongoose.Schema(
+const ProductSchema = new Schema(
   {
-    title: { type: String, required: true, trim: true },
-    content: { type: String, trim: true },
-    description: { type: String, trim: true },
-    pricing: { type: String, trim: true },
-    mrp: { type: String, trim: true },
-    otherDetails: { type: String, trim: true },
-    images: [
-      {
-        url: { type: String, required: true },
-        name: { type: String },
-        type: { type: String },
-      },
-    ],
-    tags: {
-      type: [String],
-      default: [],
-    },
-    uploadedBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
+    title: { type: String, required: true },
+    description: String,
+    price: { type: Number, required: true },
+    imageUrl: {
+  type: [String],  // <-- array of strings
+  required: true,
+},
+    category: String,
+    stock: Number,
+    rating: Number,
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Product", ProductSchema);
+export default mongoose.models.Product || mongoose.model("Product", ProductSchema);
+

@@ -1,164 +1,50 @@
-'use client'
+'use client';
 
-import Link from "next/link";
-import Image from "next/image";
-import { signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useState } from 'react';
+import { Menu, X } from 'lucide-react';
 
-export function NavbarWithDropdown() {
-  const { data: session } = useSession();
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => setIsOpen(!isOpen);
+
   return (
-    <div className="navbar bg-base-100 shadow-sm">
-  <div className="navbar-start">
-    <div className="dropdown">
-      <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
+    <nav className="bg-white shadow-md fixed top-0 left-0 w-full z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+        <Link href="/" className="text-xl font-bold text-black">
+          Rncompany
+        </Link>
+
+        <div className="md:hidden">
+          <button onClick={toggleMenu} className="text-gray-700 focus:outline-none">
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
+
+        <ul className="hidden md:flex gap-8 items-center">
+          <li><Link href="/" className="text-gray-700 hover:text-black">Home</Link></li>
+          <li><Link href="/products" className="text-gray-700 hover:text-black">Products</Link></li>
+          <li><Link href="/offers" className="text-gray-700 hover:text-black">Offers</Link></li>
+          <li><Link href="/contact" className="text-gray-700 hover:text-black">Contact</Link></li>
+          <li><Link href="/signup" onClick={toggleMenu}>signup</Link></li>
+          <li><Link href="/login" onClick={toggleMenu}>login</Link></li>
+          <li><Link href="/cart" onClick={toggleMenu}>cart</Link></li>
+        </ul>
       </div>
-      <ul
-        tabIndex={0}
-        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-        <li><a>Item 1</a></li>
-        <li>
-          <a>Parent</a>
-          <ul className="p-2">
-            <li><a>Submenu 1</a></li>
-            <li><a>Submenu 2</a></li>
-          </ul>
-        </li>
-        <li><a>Item 3</a></li>
-      </ul>
-    </div>
-    <a className="btn btn-ghost text-xl">daisyUI</a>
-  </div>
-  <div className="navbar-center hidden lg:flex">
-    <ul className="menu menu-horizontal px-1">
-      <li><a>Item 1</a></li>
-      <li>
-        <details>
-          <summary>Parent</summary>
-          <ul className="p-2">
-            <li><a>Submenu 1</a></li>
-            <li><a>Submenu 2</a></li>
-          </ul>
-        </details>
-      </li>
-      <li><a>Item 3</a></li>
-    </ul>
-  </div>
-  <div className="navbar-center ">
-         <Image
-      src="/next.svg"
-     fill
-      alt="Picture of the author"
-    />
-    
-        <a className="btn btn-ghost text-xl">RNCompany</a>
-        </div>
-        <div className="navbar-end">
-         
-          <Link href='/signup' className="font-semibold ">
-        Signup
-        </Link>/
-        <Link href='/login' className="font-semibold ">
-          Login
-        </Link>
-        {session ? (
-        <button onClick={() => signOut({ callbackUrl: '/' })}>Logout</button>
-      ) : (
-        <a href="/login">Login</a>
+
+      {/* Mobile menu */}
+      {isOpen && (
+        <ul className="md:hidden px-6 pb-4 space-y-3 bg-white shadow">
+          <li><Link href="/" onClick={toggleMenu}>Home</Link></li>
+          <li><Link href="/products" onClick={toggleMenu}>Products</Link></li>
+          <li><Link href="/offers" onClick={toggleMenu}>Offers</Link></li>
+          <li><Link href="/contact" onClick={toggleMenu}>Contact</Link></li>
+          <li><Link href="/signup" onClick={toggleMenu}>signup</Link></li>
+          <li><Link href="/login" onClick={toggleMenu}>login</Link></li>
+          <li><Link href="/cart" onClick={toggleMenu}>cart</Link></li>
+        </ul>
       )}
-        <button className="btn btn-ghost btn-circle">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /> </svg>
-        </button>
-        <button className="btn btn-ghost btn-circle">
-        <div className="indicator">
-        <Link href="/cart"><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /> </svg>
-        </Link>
-        <span className="badge badge-xs badge-primary indicator-item"></span>
-        
-        </div>
-        </button>
-  </div>
-  <div className="navbar-end">
-    <a className="btn">Button</a>
-  </div>
-</div>
+    </nav>
   );
 }
-
-
-export function NavbarWithKeys() {
-    const { data: session } = useSession();
-    return(
-        <div className="navbar bg-base-100 shadow-sm">
-        <div className="navbar-start">
-        <div className="dropdown">
-        <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /> </svg>
-        </div>
-        <ul
-        tabIndex={0}
-        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-        <li><a>Homepage</a></li>
-        <li><a>Product</a></li>
-        <li><a>About</a></li>
-        </ul>
-        </div>
-        </div>
-        <div className="relative w-32 h-10 ">
-         <Image
-      src="/file.svg"
-      fill
-      className="object-contain"
-      alt="Picture of the author"
-    />
-    
-        <a className="btn btn-ghost text-xl">RNCompany</a>
-        </div>
-        <div className="navbar-end">
-         
-          <Link href='/signup' className="font-semibold ">
-        Signup
-        </Link>/
-        <Link href='/login' className="font-semibold ">
-          Login
-        </Link>
-        {session ? (
-        <button onClick={() => signOut({ callbackUrl: '/' })}>Logout</button>
-      ) : (
-        <a href="/login">Login</a>
-      )}
-        <button className="btn btn-ghost btn-circle">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /> </svg>
-        </button>
-        <button className="btn btn-ghost btn-circle">
-        <div className="indicator">
-        <Link href="/cart"><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /> </svg>
-        </Link>
-        <span className="badge badge-xs badge-primary indicator-item"></span>
-        
-        </div>
-        </button>
-        </div>
-        </div>
-
-    );
-}
-
-
-
-// 'use client';
-// import { signOut, useSession } from 'next-auth/react';
-
-// export default function Navbar() {
-//   const { data: session } = useSession();
-
-//   return (
-//     <nav>
-//       {session ? (
-//         <button onClick={() => signOut({ callbackUrl: '/' })}>Logout</button>
-//       ) : (
-//         <a href="/login">Login</a>
-//       )}
-//     </nav>
-//   );
-// }

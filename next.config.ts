@@ -4,8 +4,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ["img.daisyui.com"],
+    domains: ["img.daisyui.com","ik.imagekit.io"],
   },
+ 
 };
 
 export default nextConfig;

@@ -1,63 +1,39 @@
-import MyCard from "./MyCard";
-import Image from "next/image";
+'use client';
 
-export function Hero1() {
-    return (
-        <div className="hero min-h-screen bg-base-300">
-            <div className="text-center">
-                
-                  <h1 className=" text-5xl font-bold">Best selling product on UPTO 50% discount</h1>
-                  <div className=" grid-cols-4 grid gap-4 mt-10">
-                    <MyCard/>
-                    <MyCard/>
-                    <MyCard/>
-                    <MyCard/>
-                </div>
-            </div>
+import Link from 'next/link';
+import Image from 'next/image';
+
+export default function Hero() {
+  return (
+    <section className="bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 text-white py-20 px-4">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
+        
+        {/* Left Side */}
+        <div className="flex-1 text-center md:text-left">
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-6 leading-tight">
+            Welcome to <span className="text-yellow-300">RNCOMPANY</span>
+          </h1>
+          <p className="text-lg sm:text-xl mb-8">
+            Discover amazing products and exclusive time-limited offers. Shop smart. Save big.
+          </p>
+          <Link href="/products">
+            <button className="bg-white text-indigo-600 font-semibold px-6 py-3 rounded-lg shadow hover:bg-gray-100 transition">
+              Shop Now
+            </button>
+          </Link>
         </div>
-    );
-}
-export function Hero2() {
-    return (
-      <>
-        <div className="hero bg-base-200 min-h-screen">
-  <div className="relative w-32 h-10">
-    <Image alt="daisy" fill
-      src="./file.svg"
-      className="max-w-sm rounded-lg shadow-2xl"
-    />
-    <div>
-      <h1 className="text-5xl font-bold">Box Office News!</h1>
-      <p className="py-6">
-        Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
-        quasi. In deleniti eaque aut repudiandae et a id nisi.
-      </p>
-      <button className="btn btn-primary">Get Started</button>
-    </div>
-  </div>
-</div></>
-    );
-}
-export function Hero3() {
-    return (
-        <div
-  className="hero min-h-screen"
-  style={{
-    backgroundImage:
-      "url(https://img.daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.webp)",
-  }}
->
-  <div className="hero-overlay"></div>
-  <div className="hero-content text-neutral-content text-center">
-    <div className="max-w-md">
-      <h1 className="mb-5 text-5xl font-bold">Hello there</h1>
-      <p className="mb-5">
-        Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
-        quasi. In deleniti eaque aut repudiandae et a id nisi.
-      </p>
-      <button className="btn btn-primary">Get Started</button>
-    </div>
-  </div>
-</div>
-    );
+
+        {/* Right Side - Image */}
+        <div className="flex-1">
+          <Image
+            src="/next.svg" // Replace with your image path
+            alt="Hero"
+            className="w-full max-w-md mx-auto md:mx-0 rounded-lg shadow-xl"
+            width={100}
+            height={100}
+          />
+        </div>
+      </div>
+    </section>
+  );
 }

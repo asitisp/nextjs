@@ -37,7 +37,7 @@ export const authOptions: NextAuthOptions = {
        async jwt({ token, user }) {
             if (user) {
                 token._id = user._id?.toString();
-                token.role = user.role;
+                token.role = user.role as "user" | "admin" | "moderator" | undefined;
                 token.username = user.username;
             }
             return token;
@@ -53,6 +53,7 @@ export const authOptions: NextAuthOptions = {
     },
     pages: {
         signIn: "/login",
+        signOut: "/signout",
     },
     session: {
         strategy: "jwt",
@@ -60,10 +61,3 @@ export const authOptions: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
    
 }
-
- // const user= await userModel.findone({
-    //     $or:[
-    //         {email:credentials.identifier}
-    //         {username:credentials.identifier}
-    //     ]
-    // })

@@ -1,92 +1,33 @@
-import * as React from "react"
+// components/ui/card.tsx
+import Image from "next/image";
+import { ProductType } from "@/types/product";
 
-import { cn } from "@/lib/utils"
-
-function Card({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="card"
-      className={cn(
-        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
-        className
-      )}
-      {...props}
-    />
-  )
+interface CardProps {
+  product: ProductType;
 }
 
-function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
+export default function Card({ product }: CardProps) {
   return (
-    <div
-      data-slot="card-header"
-      className={cn(
-        "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6",
-        className
-      )}
-      {...props}
-    />
-  )
-}
+    <div className="border p-4 rounded-lg shadow-md">
+      <div className="relative w-full h-52">
+        {product.imageUrl?.[0] && (
+  <Image
+    src={product.imageUrl[0]}
+    alt={product.title}
+    fill
+    className="object-cover rounded"
+    priority
+    
+  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+  />
+)}
 
-function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="card-title"
-      className={cn("leading-none font-semibold", className)}
-      {...props}
-    />
-  )
-}
-
-function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="card-description"
-      className={cn("text-muted-foreground text-sm", className)}
-      {...props}
-    />
-  )
-}
-
-function CardAction({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="card-action"
-      className={cn(
-        "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
-        className
-      )}
-      {...props}
-    />
-  )
-}
-
-function CardContent({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="card-content"
-      className={cn("px-6", className)}
-      {...props}
-    />
-  )
-}
-
-function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="card-footer"
-      className={cn("flex items-center px-6 [.border-t]:pt-6", className)}
-      {...props}
-    />
-  )
-}
-
-export {
-  Card,
-  CardHeader,
-  CardFooter,
-  CardTitle,
-  CardAction,
-  CardDescription,
-  CardContent,
+      </div>
+      <div className="mt-4">
+        <h2 className="text-lg font-bold">{product.title}</h2>
+        <p className="text-gray-600">{product.description}</p>
+        <p className="text-blue-600 font-semibold mt-2">₹{product.price}</p>
+      </div>
+    </div>
+  );
 }

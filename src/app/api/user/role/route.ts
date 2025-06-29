@@ -1,12 +1,17 @@
-import { connectToDB } from "@/lib/dbconnect";
-import User from "@/models/User";
+// app/api/user/role/route.ts
 import { NextRequest, NextResponse } from "next/server";
+import  {connectToDB}  from "@/lib/dbconnect";
+import User from "@/models/User";
+import { adminMiddleware } from "@/middleware/admin";
 
 export async function PUT(req: NextRequest) {
-  await connectToDB();
+  const check = await adminMiddleware(req);
+  if (check) return check;
+
+  const { email, role } = await req.json();
 
   try {
-    const { email, role } = await req.json();
+    await connectToDB();
 
     const updated = await User.findOneAndUpdate(
       { email },
@@ -14,14 +19,15 @@ export async function PUT(req: NextRequest) {
       { new: true }
     );
 
-    if (!updated) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
+    if (!updated) return NextResponse.json({ message: "User not found" }, { status: 404 });
 
     return NextResponse.json({ message: "Role updated", user: updated });
-
-  } catch (error) {
-    console.error("Role update failed:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  } catch (error: unknown) {
+  if (error instanceof Error) {
+    console.error("Image upload error:", error.message);
+  } else {
+    console.error("Image upload error:", error);
+  }
+  return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

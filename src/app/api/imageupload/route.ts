@@ -1,66 +1,51 @@
-// app/api/imageupload/route.ts
-import { NextRequest, NextResponse } from "next/server";
-import ImageKit from "imagekit";
-import { connectToDB } from "@/lib/dbconnect";
-import Product from "@/models/Product";
-
-const imagekit = new ImageKit({
-  publicKey: process.env.IMAGEKIT_PUBLIC_KEY!,
-  privateKey: process.env.IMAGEKIT_PRIVATE_KEY!,
-  urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT!,
-});
+import { NextRequest, NextResponse } from 'next/server';
+import { connectToDB } from '@/lib/dbconnect';
+import Product from '@/models/Product';
+import imagekit from '@/lib/imagekit';
+import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(req: NextRequest) {
   await connectToDB();
 
   try {
-    const data = await req.formData();
-    const files = data.getAll("files");
+    const formData = await req.formData();
 
-    const title = data.get("title")?.toString() || "";
-    const description = data.get("description")?.toString() || "";
-    const pricing = data.get("pricing")?.toString() || "";
-    const mrp = data.get("mrp")?.toString() || "";
-    const content = data.get("content")?.toString() || "";
-    const otherDetails = data.get("otherDetails")?.toString() || "";
+    const title = formData.get('title') as string;
+    const description = formData.get('description') as string;
+    const price = Number(formData.get('price'));
+    const category = formData.get('category') as string;
+    const stock = Number(formData.get('stock'));
+    const rating = Number(formData.get('rating'));
 
-    const images = [];
+    const imageFiles = formData.getAll('images') as File[]; // <-- support multiple images
 
-    for (const file of files) {
-      if (typeof file === "string") continue;
-
-      const bytes = await (file as Blob).arrayBuffer();
-      const buffer = Buffer.from(bytes);
-
-      const upload = await imagekit.upload({
-        file: buffer,
-        fileName: (file as File).name,
-      });
-
-      // ✅ Push the object directly (NOT wrapped in an array)
-      images.push({
-        url: upload.url,
-        name: upload.name,
-        type: upload.fileType,
-      });
+    if (!title || !price || !category || imageFiles.length === 0) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // ✅ Double check the shape is correct
-    console.log("✅ Final images array before saving:", images);
+    const imageUrls: string[] = [];
 
-    // ❗ NEVER stringify here!
-    const product = await Product.create({
+    for (const file of imageFiles) {
+      const buffer = Buffer.from(await file.arrayBuffer());
+      const uploadResponse = await imagekit.upload({
+        file: buffer,
+        fileName: `${uuidv4()}-${file.name}`,
+      });
+      imageUrls.push(uploadResponse.url);
+    }
+
+    const newProduct = await Product.create({
       title,
       description,
-      pricing,
-      mrp,
-      content,
-      otherDetails,
-      images, // ✅ Send real array of objects
-      tags: [],
+      price,
+      imageUrl: imageUrls, // store array of URLs
+      category,
+      stock,
+      rating,
     });
 
-    return NextResponse.json({ success: true, data: product });
+    return NextResponse.json({ success: true, product: newProduct }, { status: 201 });
+
   } catch (error: unknown) {
   if (error instanceof Error) {
     console.error("Image upload error:", error.message);

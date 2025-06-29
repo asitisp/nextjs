@@ -15,9 +15,9 @@ export function Divider() {
 export function DividerHorizontal() {
     return (
         <div className="flex w-full">
-            <div className="divider divider-horizontal">Default</div>
-            <div className="divider divider-horizontal">Horizontal</div>
-            <div className="divider divider-horizontal">Vertical</div>
+            <div className="divider divider-horizontal"></div>
+            <div className="divider divider-horizontal"></div>
+            <div className="divider divider-horizontal"></div>
         </div>
     );
 }
